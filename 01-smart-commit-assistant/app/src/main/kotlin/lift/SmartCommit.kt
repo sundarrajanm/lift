@@ -13,11 +13,16 @@ import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 class SmartCommit(private val model: String?) {
-
-    val prompts = Prompts(
+    val defaultPrompts = Prompts(
         systemPrompt = "You are an expert software engineer who writes concise, meaningful git commit messages.",
         userPrompt = "Generate a Conventional Commits commit message with less than 50 characters for this diff:\n\$diff"
     )
+
+    // Default location for prompts file
+    val configPath = "${System.getProperty("user.home")}/.lift/prompts.json"
+
+    // Load from file if exists, else use default
+    val prompts = Prompts.loadFromFile(configPath) ?: defaultPrompts
 
     suspend fun run() {
         val effectiveModel = model ?: "llama3"
