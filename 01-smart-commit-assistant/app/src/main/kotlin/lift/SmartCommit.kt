@@ -14,6 +14,11 @@ import java.util.concurrent.TimeUnit
 
 class SmartCommit(private val model: String?) {
 
+    val prompts = Prompts(
+        systemPrompt = "You are an expert software engineer who writes concise, meaningful git commit messages.",
+        userPrompt = "Generate a Conventional Commits commit message with less than 50 characters for this diff:\n\$diff"
+    )
+
     suspend fun run() {
         val effectiveModel = model ?: "llama3"
         println("🔍 Gathering git diff...")
@@ -50,7 +55,7 @@ class SmartCommit(private val model: String?) {
         json.put("model", "llama3")
         json.put(
             "prompt",
-            "Generate a Conventional Commits style commit message (under 50 chars) for this diff:\n\n$diff"
+            "${prompts.systemPrompt}\n${prompts.userPrompt.replace("\$diff", diff)}"
         )
 
         val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
@@ -100,11 +105,11 @@ class SmartCommit(private val model: String?) {
                 messages = listOf(
                     ChatMessage(
                         role = ChatRole.System,
-                        content = "You are an expert software engineer who writes concise, meaningful git commit messages."
+                        content = prompts.systemPrompt
                     ),
                     ChatMessage(
                         role = ChatRole.User,
-                        content = "Generate a Conventional Commits style commit message (under 50 chars) for this diff:\n\n$diff"
+                        content = prompts.userPrompt.replace("\$diff", diff)
                     )
                 ),
                 maxTokens = 100
