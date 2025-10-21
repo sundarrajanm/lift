@@ -13,16 +13,16 @@ import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 class SmartCommit(private val model: String?) {
-    val defaultPrompts = Prompts(
+    private val defaultPrompts = Prompts(
         systemPrompt = "You are an expert software engineer who writes concise, meaningful git commit messages.",
         userPrompt = "Generate a Conventional Commits commit message with less than 50 characters for this diff:\n\$diff"
     )
 
     // Default location for prompts file
-    val configPath = "${System.getProperty("user.home")}/.lift/prompts.json"
+    private val configPath = "${System.getProperty("user.home")}/.lift/01-smart-commit-assistant/prompts.json"
 
     // Load from file if exists, else use default
-    val prompts = Prompts.loadFromFile(configPath) ?: defaultPrompts
+    private val prompts = Prompts.loadFromFile(configPath) ?: throw error("Failed")
 
     suspend fun run() {
         val effectiveModel = model ?: "llama3"
@@ -56,6 +56,7 @@ class SmartCommit(private val model: String?) {
     }
 
     private fun generateWithOllama(diff: String) {
+        println("Ollama prompts: ${prompts}")
         val json = JSONObject()
         json.put("model", "llama3")
         json.put(
@@ -90,12 +91,13 @@ class SmartCommit(private val model: String?) {
                 }
             }
 
-            println("\n💬 Suggested Commit Message:")
+            println("\n💬 Suggested Commit Message ->")
             println("👉 ${finalOutput.toString().trim()}")
         }
     }
 
     private suspend fun generateWithOpenAI(diff: String, model: String) {
+        println("OpenAI prompts: ${prompts}")
         val dotenv = dotenv()
         val apiKey = dotenv["OPENAI_API_KEY"]
         if (apiKey.isNullOrBlank()) {
