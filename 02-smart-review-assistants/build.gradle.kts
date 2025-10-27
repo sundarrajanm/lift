@@ -18,6 +18,9 @@ dependencies {
     implementation("org.json:json:20240303")
     implementation("io.ktor:ktor-client-okhttp:2.3.4")
 
+    implementation("com.aallam.openai:openai-client:3.8.1") // OpenAI Kotlin SDK
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1") // for environment variables
+
     testImplementation(kotlin("test"))
 }
 

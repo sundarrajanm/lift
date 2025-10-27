@@ -15,16 +15,18 @@ abstract class LlmReviewerAgent(
 
     override suspend fun execute(input: CodeReviewInput): ReviewResult {
         val prompt = """
-            ${systemPrompt()}
-            
-            Code Diff:
-            ${input.diff}
-            
-            Output JSON in this format:
+            You are a JSON-only assistant.
+            Always respond with valid JSON matching this schema:
             {
             "category": "...",
             "issues": [ { "line": 0, "comment": "...", "severity": "low|medium|high" } ]
             }
+            Do not include explanations or markdown. Output only JSON.
+
+            ${systemPrompt()}
+            
+            Code Diff:
+            ${input.diff}            
             """.trimIndent()
 
         val rawOutput = modelClient.complete(prompt)

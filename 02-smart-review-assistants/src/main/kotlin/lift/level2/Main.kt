@@ -4,6 +4,7 @@ import lift.level2.agents.*
 import lift.level2.interfaces.LlmClient
 import lift.level2.llm.Ollama
 import lift.level2.model.CodeReviewInput
+import lift.level2.model.prettyPrint
 import lift.level2.utils.getGitDiff
 
 suspend fun main() {
@@ -24,5 +25,5 @@ suspend fun main() {
     val orchestrator = ReviewOrchestrator(reviewers, LeadReviewerAgent())
 
     val review = orchestrator.review(CodeReviewInput(getGitDiff()))
-    println(review)
+    print(review.prettyPrint())
 }
