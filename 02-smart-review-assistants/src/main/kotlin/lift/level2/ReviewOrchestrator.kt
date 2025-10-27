@@ -16,7 +16,10 @@ class ReviewOrchestrator(
     suspend fun review(input: CodeReviewInput): ConsolidatedReview = coroutineScope {
         val results = reviewers.map { reviewer -> async {
             println("Running reviewer: ${reviewer.name}")
-            reviewer.execute(input) }
+            val output = reviewer.execute(input)
+            println("Completed reviewer: ${reviewer.name}: $output")
+            output
+        }
         }.awaitAll()
         leadReviewer.execute(results)
     }
