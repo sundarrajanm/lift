@@ -61,3 +61,36 @@ tasks.register("installTool") {
         println("Try running: smart-commit")
     }
 }
+
+tasks.register("installHook") {
+    group = "tooling"
+    description = "Installs the Smart Commit Assistant pre-commit hook."
+
+    doLast {
+        val hookScript = """
+            #!/bin/bash
+            echo "🧠 Smart Commit Assistant preview:"
+            echo "-----------------------------------"
+            smart-commit
+            echo
+            echo "-----------------------------------"
+            echo "Press ENTER to continue with your commit..."
+            
+            read -r _ < /dev/tty
+
+            exit 0
+        """.trimIndent()
+
+        val gitDir = file("${project.rootDir}/../.git/hooks")
+        val hookFile = file("${gitDir}/pre-commit")
+
+        if (!gitDir.exists()) {
+            throw GradleException(".git directory not found. Please run this inside a Git repo.")
+        }
+
+        hookFile.writeText(hookScript)
+        hookFile.setExecutable(true)
+
+        println("✅ Installed Smart Commit Assistant pre-commit hook.")
+    }
+}

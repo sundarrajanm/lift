@@ -10,8 +10,14 @@ accurately reflect the purpose and scope of the changes.
 ./gradlew run
 ```
 
-## How to install as a tool to run from anywhere
+## Install as a tool to run from anywhere
 
 ```
 ./gradlew installTool --no-configuration-cache
+```
+
+## Install as a git commit hook for the current repository
+
+```
+./gradlew installGitHook --no-configuration-cache
 ```
