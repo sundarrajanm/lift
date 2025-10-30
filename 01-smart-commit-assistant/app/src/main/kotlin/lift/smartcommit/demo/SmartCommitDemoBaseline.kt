@@ -24,7 +24,6 @@ object SmartCommitDemoBaseline {
     }
 
     fun buggyFunction(): Int {
-        // This intentionally causes an exception to simulate a bugfix later
         val input: String? = null
         return input!!.length
     }
