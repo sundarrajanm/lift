@@ -61,7 +61,10 @@ class SmartCommit(private val model: String?) {
         json.put("model", "llama3")
         json.put(
             "prompt",
-            "${prompts.systemPrompt}\n${prompts.userPrompt.replace("\$diff", diff)}"
+            "${prompts.systemPrompt}\n${prompts.userPrompt.replace("\$diff", diff)}",
+        )
+        json.put(
+            "options", mapOf("temperature" to 0.2)
         )
 
         val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
