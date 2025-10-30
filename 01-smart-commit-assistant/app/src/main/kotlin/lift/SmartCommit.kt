@@ -58,6 +58,8 @@ class SmartCommit(private val model: String?) {
     private fun generateWithOllama(diff: String) {
         println("Ollama prompts: ${prompts}")
         val json = JSONObject()
+//        json.put("model", "codellama")
+//        json.put("model", "deepseek-coder:6.7b")
         json.put("model", "llama3")
         json.put(
             "prompt",
