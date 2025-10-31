@@ -12,5 +12,3 @@ build
 
 # Ignore kotlin compiler workings
 .kotlin
-
-**/patches.txt

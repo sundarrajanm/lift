@@ -1,0 +1,34 @@
+eg-01:
+
+    fun buggyFunction(): Int {
+        val input: String? = null
+        return if (input != null) {
+            input.length
+        } else {
+            println("⚠️ Input was null, returning 0 as fallback")
+            0
+        }
+    }
+
+eg-02:
+
+    fun greet(): String {
+        val message = "Hello from Smart Commit Assistant!"
+        println("👋 Greeting user: $message")
+        return message
+    }
+
+eg-03:
+
+    private var cachedGreeting: String? = null
+
+    fun greet(): String {
+        if (cachedGreeting == null) {
+            val message = "Hello from Smart Commit Assistant!"
+            println("👋 Greeting user: $message")
+            cachedGreeting = message
+        } else {
+            println("♻️ Using cached greeting")
+        }
+        return cachedGreeting!!
+    }
